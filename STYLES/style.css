@@ -59,3 +59,13 @@ button{
     color: rgb(10, 116, 238);
 }
 
+.equal{
+    /* color: rgb(10, 116, 238); */
+    background-color: rgb(10, 116, 238); 
+}
+
+.equal button{
+    color: white;
+    background-color: rgb(10, 116, 238); 
+}
+
