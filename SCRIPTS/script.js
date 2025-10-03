@@ -2,9 +2,12 @@ const calBtn = document.querySelectorAll('.btn');
 const calScreen = document.querySelector('.screen');
 let calValues = [];
 let finalVal = "";
-let firstNum = "";
+let currentNum = '';
+let currentAns = '';
+let displayedEquation = '';
 
 function getCalulations(userInpt) {
+    console.log("user: ", userInpt);
     let num = userInpt[0];
     let operator = userInpt[1];
     let num2 = userInpt[2];
@@ -31,6 +34,7 @@ function getCalulations(userInpt) {
 }
 
 function display(value) {
+    finalVal = "";
     if (value !== "AC" || value !== "DEL" || value !== "="){
         return finalVal += value;
     }
@@ -38,31 +42,45 @@ function display(value) {
 
 calBtn.forEach(calBtn => {
         calBtn.addEventListener('click', (event) => {
-
+            
         if (event.target.value === '=') {
-            calValues.push(firstNum);
-            calScreen.textContent = getCalulations(calValues);
+            calValues.push(currentNum);
+            currentAns = getCalulations(calValues).toString();
+            calScreen.textContent = currentAns;
             calValues = [];
         } else if (event.target.value === 'AC') {
-           
             calValues = [];
-            firstNum = '';
+            currentNum = '';
+            currentAns = '';
+            displayedEquation = '';
             calScreen.textContent = '0';
         } else if (event.target.value === 'DEL') {
             calValues.pop();
-            console.log("DEL -->", calValues);
+            currentNum = '';
             calScreen.textContent = calValues;
-        } else if (event.target.value === '+' || event.target.value === '-' || event.target.value === '/'){
-            calValues.push(firstNum);
-            firstNum = '';
-            calValues.push(event.target.value);
-            console.log(calValues)
-            calScreen.textContent = display(event.target.value);
-            console.log("values -->", event.target.value);
+        } else if (event.target.value === '+' || event.target.value === '-' || event.target.value === '/' || event.target.value === '*'){
+           if (currentAns === '') {
+               displayedEquation += event.target.value;
+               calScreen.textContent = displayedEquation;
+               calValues.push(currentNum);
+               currentNum = '';
+               calValues.push(event.target.value);
+            } else {
+                calValues.push(currentAns);
+                displayedEquation = currentAns + event.target.value;
+                calValues.push(event.target.value);
+                calScreen.textContent = displayedEquation;
+           }
         } else {
-            firstNum += event.target.value;
-            console.log(firstNum);
-            calScreen.textContent = firstNum;
+            if (currentAns === '') {
+                displayedEquation += event.target.value;
+                currentNum += event.target.value;
+                calScreen.textContent = displayedEquation;
+            } else {
+                displayedEquation += event.target.value;
+                currentNum = event.target.value;
+                calScreen.textContent = displayedEquation;
+            }
         }
     });
 });
